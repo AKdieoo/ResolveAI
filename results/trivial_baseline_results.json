@@ -1,0 +1,8 @@
+{
+  "baseline": "trivial",
+  "intent_accuracy": 0.095,
+  "majority_class": "general_chitchat_ack",
+  "escalate_accuracy": 0.635,
+  "escalate_recall_for_true_class": 0.0,
+  "n_golden": 200
+}

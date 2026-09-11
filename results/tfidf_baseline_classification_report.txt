@@ -1,0 +1,15 @@
+                              precision    recall  f1-score   support
+
+billing_payment_subscription       0.75      0.78      0.77        23
+  content_missing_restricted       0.71      0.50      0.59        20
+     device_platform_support       0.38      0.75      0.50        12
+     downloads_offline_issue       0.70      0.93      0.80        15
+      family_plan_management       0.62      1.00      0.77        10
+    feature_request_feedback       0.94      0.46      0.62        37
+        general_chitchat_ack       0.37      0.89      0.52        19
+        login_account_access       0.94      0.63      0.76        27
+    playback_streaming_issue       0.90      0.49      0.63        37
+
+                    accuracy                           0.65       200
+                   macro avg       0.70      0.72      0.66       200
+                weighted avg       0.77      0.65      0.66       200

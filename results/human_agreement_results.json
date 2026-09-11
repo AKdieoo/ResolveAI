@@ -1,0 +1,8 @@
+{
+  "n_rated": 30,
+  "exact_agreement_rate": 0.6667,
+  "agreement_within_1_point": 0.7333,
+  "cohens_kappa_linear_weighted": 0.0,
+  "pearson_r": null,
+  "note": "Computed from results/human_agreement_sheet.csv. See eval/human_agreement.py docstring for the rating protocol. This script is real and complete; the numbers only exist once a human has actually filled in the sheet."
+}

@@ -1,0 +1,8 @@
+{
+  "metric": "unfiltered_grounding_weak_intent_match_rate@k",
+  "k": 3,
+  "n_golden": 200,
+  "hit_rate": 0.525,
+  "mean_top1_similarity": 0.4735,
+  "caveat": "Measured on the FULL retrieval pool with plain text similarity (no intent filtering, no peeking at true_intent) -- see the docstring above for why the filtered version would have been circular. It also checks retrieved weak_intent against true_intent, and weak labels only agree with hand labels ~63% of the time (golden_set_methodology.md), so this hit rate is a floor, not a ceiling, on true grounding relevance -- see decision log #12."
+}

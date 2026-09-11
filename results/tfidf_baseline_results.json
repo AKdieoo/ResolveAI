@@ -1,0 +1,12 @@
+{
+  "baseline": "tfidf_logreg",
+  "n_train": 42816,
+  "n_golden": 200,
+  "intent_accuracy": 0.65,
+  "intent_f1_macro": 0.6613,
+  "intent_f1_weighted": 0.6583,
+  "escalate_accuracy": 0.84,
+  "escalate_precision": 0.7808,
+  "escalate_recall": 0.7808,
+  "escalate_f1": 0.7808
+}

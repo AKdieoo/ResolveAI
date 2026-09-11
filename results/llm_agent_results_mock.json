@@ -1,0 +1,25 @@
+{
+  "baseline": "llm_agent_MOCK",
+  "mock_mode": true,
+  "n_golden": 20,
+  "intent_accuracy": 0.6,
+  "intent_f1_macro": 0.6272,
+  "intent_f1_weighted": 0.5717,
+  "escalate_accuracy": 0.8,
+  "escalate_precision": 0.8,
+  "escalate_recall": 0.5714,
+  "escalate_f1": 0.6667,
+  "intent_parse_failure_rate": 0.0,
+  "escalate_parse_failure_rate": 0.0,
+  "reply_parse_failure_rate": 0.0,
+  "judge_parse_failure_rate": 0.0,
+  "judge_mean_scores_excl_parse_failures": {
+    "judge_groundedness": 3.0,
+    "judge_correctness": 3.0,
+    "judge_tone": 3.0,
+    "judge_actionability": 3.0,
+    "judge_safety": 3.0,
+    "judge_overall": 3.0
+  },
+  "WARNING": "mock_mode=True: intent/escalate metrics reflect a rule-based stand-in (MockLLMClient), NOT a real LLM. Judge scores are fixed dummy values. This file validates that the pipeline and harness run correctly end-to-end -- it is not a quality result. Run without --mock (and with ANTHROPIC_API_KEY set) for real numbers."
+}

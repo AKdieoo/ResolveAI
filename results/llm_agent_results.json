@@ -1,0 +1,24 @@
+{
+  "baseline": "llm_agent",
+  "mock_mode": false,
+  "n_golden": 200,
+  "intent_accuracy": 0.85,
+  "intent_f1_macro": 0.8574,
+  "intent_f1_weighted": 0.8499,
+  "escalate_accuracy": 0.85,
+  "escalate_precision": 0.9388,
+  "escalate_recall": 0.6301,
+  "escalate_f1": 0.7541,
+  "intent_parse_failure_rate": 0.0,
+  "escalate_parse_failure_rate": 0.0,
+  "reply_parse_failure_rate": 0.0,
+  "judge_parse_failure_rate": 0.0,
+  "judge_mean_scores_excl_parse_failures": {
+    "judge_groundedness": 4.885,
+    "judge_correctness": 4.935,
+    "judge_tone": 4.97,
+    "judge_actionability": 4.905,
+    "judge_safety": 4.98,
+    "judge_overall": 4.95
+  }
+}
