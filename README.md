@@ -27,48 +27,58 @@ python -m eval.harness --mock --n 20        # pipeline smoke test, NOT quality n
 
 ### Reproducible results (real, already run)
 
-| Metric | Trivial baseline | TF-IDF + LogReg baseline |
-|---|---|---|
-| Intent accuracy (9-way, n=200) | 9.5% | **65.0%** |
-| Intent F1 (macro) | — | 66.1% |
-| Escalate accuracy | 63.5% | **83.5%** |
-| Escalate F1 | 0% | 77.6% |
+| Metric | Trivial | TF-IDF + LogReg | LLM Agent (Gemini 3.5 Flash-Lite) |
+|---|---|---|---|
+| Intent accuracy (9-way, n=200) | 9.5% | 65.0% | **85.0%** |
+| Intent F1 (macro) | -- | 66.1% | **85.7%** |
+| Escalate accuracy | 63.5% | 83.5% | **85.0%** |
+| Escalate F1 | 0% | 77.6% | 75.4% |
+| Reply quality (LLM judge, 1-5) | n/a | n/a | 4.95 avg |
 
-Grounding retrieval quality (`agent/retriever.py`, local, no API — see
-`results/retrieval_eval_results.json`): plain TF-IDF text similarity over
+All 200 golden-set rows, run for real, zero parse failures. Full output
+in results/llm_agent_predictions.csv and results/llm_agent_results.json.
+
+Grounding retrieval quality (agent/retriever.py, local, no API -- see
+results/retrieval_eval_results.json): plain TF-IDF text similarity over
 the full 43k-pair pool surfaces a same-true-intent example in the top-3
-**52.5%** of the time (a floor, not a ceiling — see decision log #12).
+52.5% of the time (a floor, not a ceiling -- see decision log #12).
 
-**Read `docs/report.md` before quoting any number above** — it has a
+A real human-agreement check (eval/human_agreement.py, n=30) found the
+LLM judge has a ceiling effect: it scored every sampled reply 5/5, while
+a human rater's scores ranged 3-5 (66.7% exact agreement). See
+docs/report.md Section 2 for the full discussion -- the 4.95/5 average
+above should be read as "the judge is easily satisfied," not "the
+replies are near-perfect."
+
+Read docs/report.md before quoting any number above -- it has a
 mandatory "what's misleading about this number" section.
 
-## Running the real LLM agent (needs your Anthropic API key)
+## Running the real LLM agent
 
-```bash
-export ANTHROPIC_API_KEY=sk-ant-...
-python -m agent.pipeline --golden-row 0        # run the agent on one message
-python -m eval.harness                          # full 200-row golden-set eval
-```
+Works with either a free-tier Gemini API key or an Anthropic API key --
+agent/llm_client.py auto-detects whichever is set.
 
-This writes `results/llm_agent_results.json` in the exact same schema as
-the baseline results files, so it drops directly into the comparison table
-in `docs/report.md` Section 2. Budget: ~200 rows × 4 LLM calls each
-(classify, escalate, draft, judge) ≈ 800 calls — check your rate limits,
-or subsample first with `--n 20`.
+Free tier (Gemini, no card needed -- get a key at aistudio.google.com/apikey):
+    $env:GEMINI_API_KEY="AIza..."          (PowerShell)
+    export GEMINI_API_KEY=AIza...          (bash)
 
-Then, to check the LLM-as-judge against a human rater:
-```bash
-python -m eval.human_agreement --sample --n 30   # writes a blinded rating sheet
-# ...fill in the human_overall column by hand...
-python -m eval.human_agreement --score
-```
+Or with an Anthropic API key:
+    export ANTHROPIC_API_KEY=sk-ant-...
 
-**Why this repo ships without real agent numbers pre-filled:** the build
-environment used to write this code has no internet access, so real
-Anthropic API calls couldn't be executed here. Every piece of code is
-complete and real; `docs/report.md` and `docs/worked_examples.md` explain
-exactly what's a real local result vs. a hand-authored illustrative
-example vs. a rule-based offline smoke test, and never blur the three.
+Then:
+    python -m agent.pipeline --golden-row 0     # run the agent on one message
+    python -m eval.harness --sleep 15           # full 200-row golden-set eval
+
+eval/harness.py checkpoints progress every 5 rows to
+results/llm_agent_checkpoint.csv and retries transient errors (rate
+limits, server hiccups) automatically. If it's interrupted, just re-run
+the same command -- it resumes from the checkpoint instead of starting
+over.
+
+To check the LLM-as-judge against a human rater:
+    python -m eval.human_agreement --sample --n 30   # writes a blinded rating sheet
+    # ...fill in the human_overall column by hand...
+    python -m eval.human_agreement --score
 
 ## What's in this repo
 
@@ -133,17 +143,16 @@ data:
 ## Status
 
 - [x] Brand selected and justified from real data
-- [x] Full data pipeline: 3M-row Twitter dump → 43k Spotify pairs → weak labels
+- [x] Full data pipeline: 3M-row Twitter dump -> 43k Spotify pairs -> weak labels
 - [x] 9-class intent taxonomy, derived from the data
 - [x] 200-example hand-labeled golden set, documented methodology
 - [x] Trivial + TF-IDF baselines, real reproducible numbers
-- [x] LLM classifier, grounded reply drafter, escalation module — complete, real code
+- [x] LLM classifier, grounded reply drafter, escalation module -- complete, real code
 - [x] Evaluation harness: automated metrics + LLM-as-judge + human-agreement protocol
-- [x] Report: framing, baselines comparison, failure analysis, misleading-number section, next steps
-- [x] Decision log, 15 entries
-- [ ] **Real LLM-agent numbers** — one command away
-  (`export ANTHROPIC_API_KEY=... && python -m eval.harness`), not run here
-  due to this build environment having no internet access
+- [x] Real LLM-agent numbers: 85.0% intent accuracy, 85.0% escalate accuracy, all 200 rows, run for real against the free Gemini API
+- [x] Real human-agreement check: 66.7% exact agreement, judge ceiling-effect finding
+- [x] Report: framing, baselines comparison, failure analysis, misleading-number section, next steps -- fully updated with real numbers
+- [x] Decision log, 17 entries
 
 ## Requirements
 - Python 3.10+
